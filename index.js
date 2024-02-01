@@ -37,6 +37,7 @@ app.use(
     max: 160,
   })
 );
+app.enable('trust proxy');
 app.use(express.json());
 app.use(cookieParser());
 
