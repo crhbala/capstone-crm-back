@@ -37,6 +37,7 @@ app.use(
     max: 160,
   })
 );
+app.set('trust proxy', 'loopback');
 app.use(express.json());
 app.use(cookieParser());
 
