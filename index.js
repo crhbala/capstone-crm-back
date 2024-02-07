@@ -1,5 +1,4 @@
-
-const express = require('express');
+const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false);
@@ -11,21 +10,22 @@ const PORT = process.env.PORT || 4050;
 require('dotenv').config()
 //IMPORT ROUTES
 
-const authRoute = require("./routes/auth/auth.js");
-const contactsRoute = require("./routes/contacts/contacts.js");
-const usersRoute = require("./routes/user/users.js");
-const companyRoute = require("./routes/company/company.js");
-const adminRoute = require("./routes/adminauth/adminauth.js");
-const employeeRoute = require("./routes/employeeauth/employeeauth.js");
-const adminDashboardRoute = require("./routes/adminauth/adminDashboard.js");
-const employeeDashboardRoute = require("./routes/employeeauth/employeeDashboard.js");
-const userDashboardRoute = require("./routes/user/userDashboard.js");
-const ticketRoute = require("./routes/tickets/tickets.js");
+const authRoute = require("./routes/auth/auth");
+const contactsRoute = require("./routes/contacts/contacts");
+const usersRoute = require("./routes/user/users");
+const companyRoute = require("./routes/company/company");
+const adminRoute = require("./routes/adminauth/adminauth");
+
+const employeeRoute = require("./routes/employeeauth/employeeauth");
+const adminDashboardRoute = require("./routes/adminauth/adminDashboard");
+
+const employeeDashboardRoute = require("./routes/employeeauth/employeeDashboard");
+const ticketRoute = require("./routes/tickets/tickets");
 
 
 //CONNECTION TO DATABASE
 console.log(process.env.DB_CONNECT,"connect t")
-mongoose.connect(process.env.DB_CONNECT);
+mongoose.connect(process.env.DB_CONNECT, () => console.log("connected to db"));
 
 
 
@@ -37,7 +37,6 @@ app.use(
     max: 160,
   })
 );
-app.set('trust proxy', 'loopback');
 app.use(express.json());
 app.use(cookieParser());
 
@@ -51,7 +50,6 @@ app.use("/api/admin", adminRoute);
 app.use("/api/employee", employeeRoute);
 app.use("/api/admindashboard", adminDashboardRoute);
 app.use("/api/employeedashboard", employeeDashboardRoute);
-app.use("/api/userdashboard",userDashboardRoute);
 app.use("/api/tickets",ticketRoute );
 
 

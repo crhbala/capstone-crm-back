@@ -31,13 +31,8 @@ const loginSchema = Joi.object({
 //SIGNUP USER
 router.post("/register", async (req, res) => {
   try {
-    const { cname, email, password, role, type } = req.body;
+    const {  email, password, role, type } = req.body;
     
-    // Check if company name already exists
-    const companyExist = await Company.findOne({ name: cname });
-    if (companyExist) {
-      return handleError(res, 400, "Company already exists");
-    }
 
     // Check if email already exists
     const emailExist = await User.findOne({ email });
@@ -74,30 +69,11 @@ router.post("/register", async (req, res) => {
       permissions,
     });
 
-    // Create a new company
-    if(user.role === "employee")
-    {
-      const company = new Company({
-        name: cname,
-        createdBy: user._id,
-      });
-    }
-   
 
-  
-  if(user.role==="employee")
-  {    
-      // Save both user and company concurrently
-      await Promise.all([user.save(), company.save()]);
-    // Update user with company details
-    const existingUser = await User.findById(user._id).exec();
-    existingUser.set({ company: cname, companyId: company._id });
-    await existingUser.save();
-  }
-  else
-  {
+     
+ 
      await user.save(); 
-  }
+  
     
 
     // Generate \verification link
@@ -117,7 +93,7 @@ router.post("/register", async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_ID,
       to: email,
-      subject: `Activation mail for Chris BALA CRM`,
+      subject: `Activation mail for Crish BALA CRM`,
       html: verificationEmailTemplate(link),
     };
 
@@ -151,7 +127,6 @@ router.post("/login", async (req, res) => {
       res
         .status(200)
         .send({ status: "400", message: "Email doesn't seem to exist" });
-      console.log("ieafkjsnoikalddsjnj");
       return;
     }
 
@@ -204,19 +179,19 @@ router.post("/login", async (req, res) => {
 });
 
 router.put("/verification/:id", async (req, res) => {
-    console.log(req.params.id);
+ 
   const decryptedString = cryptr.decrypt(req.params.id);
   console.log(decryptedString,"quesry");
   const query = await User.where({ email: decryptedString });
-  
+  console.log(query,"quesry");
   try {
     if (query.length === 0) {
       res.status(200).send({ status: "400", message: "Invalid String" });
       return;
     }
-    const activate = await User.findById(query[0]._id).exec();
+    const activate = await User.findOne({email:query[0].email}).exec();
     activate.set({ verified: true });
-    // console.log("verified");
+     console.log(activate,"verified");
     await activate.save();
     res.status(200).send({ status: "200", message: "Account Verified !" });
   } catch (error) {

@@ -1,4 +1,4 @@
-const feLink = require("../link.js");
+const feLink = require("../link");
 
 const verificationEmailTemplate = (link) =>
   `<!doctype html>
@@ -54,7 +54,7 @@ const verificationEmailTemplate = (link) =>
                       <br />
                       <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
   
-                        Chris BALA CRM is happy to have onboard. You are just one step away from exploring its features.
+                        Crish BALA CRM is happy to have onboard. You are just one step away from exploring its features.
   
                       </p>
                     </td>
